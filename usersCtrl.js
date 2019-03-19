@@ -2,23 +2,20 @@ let userData = require('./userData.json');
 
 module.exports = {
     getAllUsers: (req, res) => {
-        let users = [];
         if(req.query.favorites){
-            users = userData.filter((user) => {
-                return user.favorites.includes(req.query.favorites)
-            })
-        } else if(req.query.age){
-            users = userData.filter((user) => {
-                return user.age < req.query.age;
-            })
-        } else if(req.query.email){
-            users = userData.filter((user) => {
-                return user.email === req.query.email;
-            })
-        } else {
-            return userData;
+            const filteredUsers = userData.filter(user => user.favorites.includes(req.query.favorites)) 
+            res.status(200).send(filteredUsers)
         }
-        res.status(200).send(users);
+        if(req.query.age){
+            const filteredAge = userData.filter(user => user.age < req.query.age)
+            res.status(200).send(filteredAge)
+        }
+        if(req.query.email){
+            const filteredEmail = userData.filter(user => user.email === req.query.email)
+            res.status(200).send(filteredEmail)
+        } else {
+            res.status(200).send(userData);
+        }
     },
     getUser: (req, res) => {
         const {id} = req.params;
